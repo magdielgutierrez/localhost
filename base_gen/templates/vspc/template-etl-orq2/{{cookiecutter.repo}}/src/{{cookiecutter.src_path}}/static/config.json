@@ -1,0 +1,65 @@
+{
+    "global"               : {
+        "dsn"                                       : "impala-virtual-prd",
+        "logs_calendarizacion": {
+            "compilacion": {
+                "porcentaje_limit": 5,
+                "log_type": "cmp"
+            },
+            "estabilidad": {
+                "log_type": "est"
+            }
+        },
+        "parametros_lz"       : {
+			"nom_proyecto"                              :  "{{cookiecutter.package_name}}",
+            "indice"                                    :  "{{cookiecutter.index}}",
+            "zona_p"                                    :  "proceso",
+            "zona_r"                                    :  "proceso",
+			"nom_tablas":{
+				"logs"                                  :   "{{cookiecutter.index}}_logs_{{cookiecutter.name}}"
+			}
+        },
+        "tbl_logs": ""
+    },
+    "Etl" : {
+        "tareas"                : [
+			{"nombre"                                   : "fn_ejecutar_etl"            , "kwargs" : []}
+        ],
+		"archivos"                                      :["etl/001_demo_consulta.sql","etl/999_limpieza.sql"]
+    },
+    "Preprocesador" : {
+        "tareas": [
+            {"nombre"                                   : "fn_leer_parametros"          ,"kwargs": []},
+            {"nombre"                                   : "fn_consultar_ingestiones"    ,"kwargs": []},
+            {"nombre"                                   : "fn_guardar_ingestiones"      ,"kwargs": []}
+        ],
+        "ingestiones": {
+            "tabla_1": {
+                "id_tabla": 1,
+                "zona": "zona_tabla_1",
+                "campos": {
+                    "t1_c1": "year",
+                    "t1_c2": "ingestion_month",
+                    "t1_c3": "ingestion_day"
+                }
+            },
+            "tabla_2": {
+                "id_tabla": 2,
+                "zona": "zona_tabla_2",
+                "campos": {
+                    "t2_c1": "year",
+                    "t2_c2": "month",
+                    "t2_c3": "ingestion_day"
+                }
+            },
+            "tabla_3": {
+                "id_tabla": 3,
+                "zona": "zona_tabla_3",
+                "campos": {
+                    "t3_c1": "year",
+                    "t3_c2": "month"
+                }
+            }
+        }
+    }
+}

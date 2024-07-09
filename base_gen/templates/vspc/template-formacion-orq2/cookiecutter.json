@@ -1,0 +1,22 @@
+{
+	"name"                  : "name",
+    "repo"                  : "vp-repo-name",
+    "package_name"          : "vp-package-name",
+    "package_title"         : "My Orchestrator Rutine",
+    "src_path"              : "vp_package_name",
+    "package_description"   : "This is an empty package template for Orchestrator 2",
+    "package_author"        : "USERNAME1",
+    "package_author_email"  : "username@bancolombia.com.co",
+    "python_version"        : "3.5.4",
+    "step1_file_name"       : "etl",
+    "step1_class_name"      : "ExtractTransformLoad",
+    "dsn_name"              : "impala-virtual-prd",
+    "tables_prefix"         : "table_prefix",
+    "process_zone"          : "proceso",
+    "creation_date"         : "AAAAMMDD",
+    "vp"                    : "vp",
+    "vp_max"                : "Vicepresidencia",
+	"index"                 : "cxc",
+    "zona_master"           : "proceso",
+	"excel"                 : "name_masterval"
+}

@@ -1,0 +1,8 @@
+include versioneer.py
+include src/{{cookiecutter.src_path}}/_version.py
+graft src/{{cookiecutter.src_path}}/static/
+include src/{{cookiecutter.src_path}}/*.py
+include src/{{cookiecutter.src_path}}/static/sql/etl/*.sql
+include src/{{cookiecutter.src_path}}/static/xlsx/*.xlsx
+include src/{{cookiecutter.src_path}}/static/*.json
+include src/{{cookiecutter.src_path}}/static/xlsx/*.xlsm

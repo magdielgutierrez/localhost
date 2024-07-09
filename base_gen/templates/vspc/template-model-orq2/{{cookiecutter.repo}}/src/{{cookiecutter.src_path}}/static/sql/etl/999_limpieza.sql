@@ -1,0 +1,22 @@
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+-- {{cookiecutter.vp_max}}
+-----------------------------------------------------------------------------
+-- Fecha Creación: {{cookiecutter.creation_date}}
+-- Última Fecha Modificación: {{cookiecutter.creation_date}}
+-- Autores: {{cookiecutter.package_author}}
+-- Últimos Autores: {{cookiecutter.package_author}}
+-- Descripción: Depuración de las tablas temporales asociadas al paso
+--              o a toda la rutina según aplique.
+-----------------------------------------------------------------------------
+---------------------------------- INSUMOS ----------------------------------
+-- proceso.temporal_ads_package_gen 
+--------------------------------- RESULTADOS --------------------------------
+-- 
+-----------------------------------------------------------------------------
+-------------------------------- Query Start --------------------------------
+
+-- ESTO ES SOLO UNA CONSULTA DE MUESTRA, SE DEBEN COLOCAR TODAS LAS TABLAS
+-- TEMPORALES QUE DEBAN SER DEPURADAS
+DROP TABLE IF EXISTS {zona_procesamiento}.{prefijo}temporal_ads_package_gen PURGE;
+--------------------------------- Query End ---------------------------------

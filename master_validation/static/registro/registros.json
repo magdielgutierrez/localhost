@@ -1,0 +1,239 @@
+{
+    "registros": {
+        "tabla": {
+            "count": {
+                "count": "IF(count(*) = {count}, 0, 1) as var_control",
+                "min": "IF(count(*) < {min}, 1, 0) AS var_control",
+                "max": "IF(count(*) > {max}, 1, 0) AS var_control"
+            },
+            "dup": {
+                "columnas": "{columnas}, row_number() OVER (PARTITION BY {columnas} ORDER BY {columnas}) AS aux_control FROM {zonatabla} WHERE {filtro}) SELECT IF(SUM(aux_control > 1) > 0, 1, 0) AS var_control"
+            },
+            "nulls": {
+                "columnas": "CASE WHEN {columnas} THEN 1 ELSE 0 END as aux_control"
+            },
+            "ingec": {
+                "dias": ", concat(cast(year(date_sub(now(), {dias}))as string) ,cast(month(date_sub(now(), {dias}))as string),cast(day(date_sub(now(), {dias}))as string)) as fecha_val"
+            },
+            "inger": {
+                "dias": ", concat(cast(year(date_sub(now(), {dias}))as string) ,cast(month(date_sub(now(), {dias}))as string),cast(day(date_sub(now(), {dias}))as string)) as fecha_val"
+            },
+            "ingescpyear": {
+                "dias": ", concat(cast(year(date_sub(now(), {dias}))as string) ,cast(month(date_sub(now(), {dias}))as string),cast(day(date_sub(now(), {dias}))as string)) as fecha_val"
+            }
+        },
+        "columna": {
+            "count": {
+                "count": "IF(SUM(IF(CAST({nom_columna} AS STRING) ='{1_}',1,0)) = {0_}, 0, 1) as var_control",
+                "min": "IF(SUM(IF(CAST({nom_columna} AS STRING) ='{1_}',1,0)) < {0_}, 1, 0) as var_control",
+                "max": "IF(SUM(IF(CAST({nom_columna} AS STRING) ='{1_}',1,0)) > {0_}, 1, 0) as var_control"
+            },
+            "dup": {
+                "max": "{nom_columna}, row_number() OVER (PARTITION BY {nom_columna} ORDER BY {nom_columna}) AS aux_control FROM {zonatabla} WHERE {filtro}) SELECT IF(SUM(aux_control > 1) > {max}, 1, 0) AS var_control"
+            },
+            "nans": {
+                "max": "IF((SUM(IF(is_nan({nom_columna}),1,0))) > {max}, 1, 0) AS var_control"
+            },
+            "nulls": {
+                "max": "CASE WHEN {nom_columna} IS NULL OR CAST({nom_columna} as STRING) IN ('nan','inf') OR TRIM(CAST({nom_columna} as STRING)) = '' THEN 1 ELSE 0 END as aux_control"
+            },
+            "reg": {
+                "exp": "IF(COUNT({nom_columna}) = SUM(REGEXP_LIKE(CAST({nom_columna} AS STRING), '{exp}')), 0, 1) AS var_control"
+            },
+            "avg": {
+                "min": "IF(AVG({nom_columna}) < {min}, 1, 0) as var_control",
+                "max": "IF(AVG({nom_columna}) > {max}, 1, 0) as var_control"
+            },
+            "max": {
+                "max": "WHEN {nom_columna} <={max} OR {nom_columna} is NULL THEN 0 ELSE 1 END AS aux_control"
+            },
+            "min": {
+                "min": "WHEN {nom_columna} >={min} OR {nom_columna} is NULL THEN 0 ELSE 1 END AS aux_control"
+            },
+            "numchar": {
+                "max": "IF(SUM(aux_control) > {max}, 1, 0) AS var_control"
+            },
+            "list": {
+                "ops": "CASE WHEN CAST({nom_columna} as STRING) IN ({ops}) OR {nom_columna} is NULL THEN 1 ELSE 0 END AS var_control"
+            },
+            "range": {
+                "range": "CASE WHEN {nom_columna} >= {0_} AND {nom_columna} <= {1_} OR {nom_columna} is NULL THEN 1 ELSE 0 END AS aux_control"
+            },
+            "textchar": {
+                "max": "IF(SUM(aux_control) > {max}, 1, 0) AS var_control"
+            },
+            "long": {
+                "max": "WHEN LENGTH({nom_columna}) <= {max} OR {nom_columna} is NULL THEN 0 ELSE 1 END AS aux_control",
+                "min": "WHEN LENGTH({nom_columna}) >= {min} OR {nom_columna} is NULL THEN 0 ELSE 1 END AS aux_control"
+            },
+            "special": {
+                "list": "WHEN regexp_like(CAST({nom_columna} AS STRING), '^.*[{list}].*$') OR {nom_columna} is NULL THEN 0 ELSE 1 END AS aux_control"
+            },
+            "blank":{
+                "max":"IF(SUM(aux_control) > {max}, 1, 0) AS var_control"
+            },
+            "outlier":{
+                "avg":"AVG({nom_columna}) - {avg}*ZEROIFNULL(STDDEV({nom_columna})) as l_range, AVG({nom_columna}) + {avg}*ZEROIFNULL(STDDEV({nom_columna})) as r_range",
+                "median": "APPX_MEDIAN({nom_columna}) - {median}*ZEROIFNULL(STDDEV({nom_columna})) as l_range, APPX_MEDIAN({nom_columna}) + {median}*ZEROIFNULL(STDDEV({nom_columna})) as r_range"
+            }
+        }
+    },
+    "registros_detalle": {
+        "tabla": {
+            "count": {
+                "count": "count(*) as var_control",
+                "min": "count(*) as var_control",
+                "max": "count(*) as var_control"
+            },
+            "dup": {
+                "columnas": "{columnas}, row_number() OVER (PARTITION BY {columnas} ORDER BY {columnas}) AS aux_control"
+            },
+            "nulls": {
+                "columnas": "SUM(CASE WHEN {columnas} THEN 1 ELSE 0 END) as var_control"
+            },
+            "ingec": {
+                "dias": ""
+            },
+            "inger": {
+                "dias": ""
+            },
+            "ingescpyear": {
+                "dias": ""
+            }
+        },
+        "columna": {
+            "count": {
+                "count": "SUM(IF(CAST({nom_columna} AS STRING) ='{1_}',1,0)) as var_control",
+                "min": "SUM(IF(CAST({nom_columna} AS STRING) = '{1_}',1,0)) as var_control",
+                "max": "SUM(IF(CAST({nom_columna} AS STRING) = '{1_}',1,0)) as var_control"
+            },
+            "dup": {
+                "max": "{nom_columna}, row_number() OVER (PARTITION BY {nom_columna} ORDER BY {nom_columna}) AS aux_control"
+            },
+            "nans": {
+                "max": "SUM(IF(is_nan({nom_columna}),1,0)) AS var_control"
+            },
+            "nulls": {
+                "max": "SUM(CASE WHEN {nom_columna} IS NULL OR CAST({nom_columna} as STRING) IN ('nan','inf') OR TRIM(CAST({nom_columna} as STRING)) = '' THEN 1 ELSE 0 END) as var_control"
+            },
+            "reg": {
+                "exp": "(COUNT({nom_columna}) - SUM(REGEXP_LIKE(CAST({nom_columna} AS STRING), '{exp}'))) AS var_control"
+            },
+            "avg": {
+                "min": "AVG({nom_columna}) as min_total",
+                "max": "AVG({nom_columna}) as max_total"
+            },
+            "max": {
+                "max": "SUM(CASE WHEN {nom_columna} <={max} OR {nom_columna} is NULL THEN 0 ELSE 1 END) AS var_control"
+            },
+            "min": {
+                "min": "SUM(CASE WHEN {nom_columna} >={min} OR {nom_columna} is NULL THEN 0 ELSE 1 END) AS var_control"
+            },
+            "numchar": {
+                "max": "SUM(aux_control) AS var_control"
+            },
+            "list": {
+                "ops": "CASE WHEN CAST({nom_columna} as STRING) IN ({ops}) OR {nom_columna} is NULL THEN 1 ELSE 0 END AS var_control"
+            },
+            "range": {
+                "range": "CASE WHEN {nom_columna} >= {0_} AND {nom_columna} <= {1_} OR {nom_columna} is NULL THEN 1 ELSE 0 END AS aux_control"
+            },
+            "textchar": {
+                "max": "SUM(aux_control) AS var_control"
+            },
+            "long": {
+                "max": "WHEN LENGTH({nom_columna}) <= {max} OR {nom_columna} is NULL THEN 0 ELSE 1 END AS aux_control",
+                "min": "WHEN LENGTH({nom_columna}) >= {min} OR {nom_columna} is NULL THEN 0 ELSE 1 END AS aux_control"
+            },
+            "special": {
+                "list": "WHEN regexp_like(CAST({nom_columna} AS STRING), '^.*[{list}].*$') OR {nom_columna} is NULL THEN 0 ELSE 1 END AS aux_control"
+            },
+            "blank":{
+                "max":"SUM(aux_control) AS var_control"
+            },
+            "outlier":{
+                "avg":"AVG({nom_columna}) - {avg}*ZEROIFNULL(STDDEV({nom_columna})) as l_range, AVG({nom_columna}) + {avg}*ZEROIFNULL(STDDEV({nom_columna})) as r_range",
+                "median": "APPX_MEDIAN({nom_columna}) - {median}*ZEROIFNULL(STDDEV({nom_columna})) as l_range, APPX_MEDIAN({nom_columna}) + {median}*ZEROIFNULL(STDDEV({nom_columna})) as r_range"
+            }
+        }
+    },
+    "detalle": {
+        "tabla": {
+            "count": {
+                "count": "El conteo total de la tabla es de {0}",
+                "min": "El conteo total de la tabla es de {0}",
+                "max": "El conteo total de la tabla es de {0}"
+            },
+            "dup": {
+                "columnas": "El numero de registros duplicados de la tabla es de {0}"
+            },
+            "nulls": {
+                "columnas": "La tabla tiene {0} filas con valores nulos"
+            },
+            "ingec": {
+                "dias": "La fecha de la ultima ingestion es {0}"
+            },
+            "inger": {
+                "dias": "La fecha de la ultima ingestion es {0}"
+            },
+            "ingescpyear": {
+                "dias": "La fecha de la ultima ingestion es {0}"
+            }
+        },
+        "columna": {
+            "count": {
+                "count": "El conteo total de la columna es {0}",
+                "min": "El conteo total de la columna es {0}",
+                "max": "El conteo total de la columna es {0}"
+            },
+            "dup": {
+                "max": "El numero de duplicados de la columna es de {0}"
+            },
+            "nans": {
+                "max": "El numero de nans de la columna es {0}"
+            },
+            "nulls": {
+                "max": "El numero de nulls de la columna es {0}"
+            },
+            "reg": {
+                "exp": "El numero de filas en la columna que no coinciden con la expresion regular es {0}"
+            },
+            "avg": {
+                "min": "El promedio de la columna es de {0}, lo cual está por debajo del mínimo requerido",
+                "max": "El promedio de la columna es de {0}, lo cual está por encima del máximo establecido"
+            },
+            "max": {
+                "max": "El numero de registros que superan el valor maximo es {0}"
+            },
+            "min": {
+                "min": "El numero de registros por debajo del valor maximo es {0}"
+            },
+            "numchar": {
+                "max": "El numero de filas que no son de solo caracteres numericos es {0}"
+            },
+            "list": {
+                "ops": "El numero total de filas que no cumplen con la lista de validacion es {0}"
+            },
+            "range": {
+                "range": "El numero total de filas que no estan dentro del rango indicado es {0}"
+            },
+            "textchar": {
+                "max": "El numero total de filas que no son solo de caracteres de texto es {0}"
+            },
+            "long": {
+                "max": "El numero total de filas con una longitud por encima del valor maximo es {0}",
+                "min": "El numero total de filas con una longitud por debajo del valor minimo es {0}"
+            },
+            "special": {
+                "list": "El numero total de filas que no tiene ninguno de los caracteres especiales especificados es {0}"
+            },
+            "blank":{
+                "max":"El numero total de filas que contienen espacios en blanco es {0}"
+            },
+            "outlier":{
+                "avg": "La cantidad de registros outliers son {0}",
+                "median": "La cantidad de registros outliers son {0}"
+            }
+        }
+    }
+}

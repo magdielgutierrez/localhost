@@ -1,0 +1,3 @@
+include versioneer.py
+include src/{{cookiecutter.src_path}}/_version.py
+graft src/{{cookiecutter.src_path}}/static/

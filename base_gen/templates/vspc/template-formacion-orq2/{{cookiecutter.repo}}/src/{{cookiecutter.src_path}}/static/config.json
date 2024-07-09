@@ -1,0 +1,30 @@
+{
+    "global"               : {
+        "dsn"                                       : "impala-virtual-prd",
+        "logs_calendarizacion": {
+            "compilacion": {
+                "porcentaje_limit": 5,
+                "log_type": "cmp"
+            },
+            "estabilidad": {
+                "log_type": "est"
+            }
+        },
+        "parametros_lz"       : {
+			"nom_proyecto"                              :  "{{cookiecutter.package_name}}",
+            "indice"                                    :  "{{cookiecutter.index}}",
+            "zona_p"                                    :  "proceso",
+            "zona_r"                                    :  "proceso_serv_para_los_clientes",
+			"nom_tablas":{
+				"logs"                                  :   "{{cookiecutter.index}}_logs_{{cookiecutter.name}}"
+			}
+        },
+        "tbl_logs": "proceso_serv_para_los_clientes.{{cookiecutter.index}}_logs_binary"
+    },
+    "Etl" : {
+        "tareas"                : [
+			{"nombre"                                   : "fn_ejecutar_etl"            , "kwargs" : []}
+        ],
+		"archivos"                                      :["etl/001_demo_consulta.sql","etl/999_limpieza.sql"]
+    }
+}
